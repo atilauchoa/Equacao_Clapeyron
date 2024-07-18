@@ -4,6 +4,9 @@ def ideal_gas_law_pressure(V, n, T, R=0.0821):
 def ideal_gas_law_volume(p, n, T, R=0.0821):
     return (n * R * T) / p
 
+def ideal_gas_law_moles(p, V, T, R=0.0821):
+    return (p * V) / (R * T)
+
 def convert_pressure(p, unit):
     if unit == 'torr':
         return p * 760
@@ -103,9 +106,40 @@ def main():
             converted_volume = convert_volume(volume, unit_conversion[unit_choice])
             print(f"O valor de V em {unit_conversion[unit_choice]} é: {converted_volume:.3f}")
 
+    elif variable_choice == 3:
+        print("Escolha a unidade para pressão:")
+        print("1 - atm")
+        print("2 - torr")
+        print("3 - Pa")
+        pressure_unit_choice = int(input("Escolha: "))
+
+        pressure_conversion = {'1': 1, '2': 1/760, '3': 1/101325}  # atm -> atm, torr -> atm, Pa -> atm
+        pressure = float(input("Digite o valor da pressão: ")) * pressure_conversion[str(pressure_unit_choice)]
+
+        print("Escolha a unidade para volume:")
+        print("1 - dm³")
+        print("2 - m³")
+        print("3 - L")
+        volume_unit_choice = int(input("Escolha: "))
+
+        volume_conversion = {'1': 1, '2': 1000, '3': 1}  # dm³ -> dm³, m³ -> dm³, L -> dm³
+        volume = float(input("Digite o valor do volume: ")) * volume_conversion[str(volume_unit_choice)]
+
+        print("Escolha a unidade para temperatura:")
+        print("1 - F°")
+        print("2 - C°")
+        print("3 - K")
+        temp_unit_choice = int(input("Escolha: "))
+
+        temp_conversion = {'1': lambda x: (x - 32) * 5/9 + 273.15, '2': lambda x: x + 273.15, '3': lambda x: x}
+        temperature = temp_conversion[str(temp_unit_choice)](float(input("Digite o valor da temperatura: ")))
+
+        R = 0.0821  # dm³·atm/(mol·K)
+        moles = ideal_gas_law_moles(pressure, volume, temperature, R)
+        print(f"O valor de n em moles é: {moles:.3f}")
+
     else:
         print("Opção inválida. Escolha uma opção válida.")
 
 if __name__ == "__main__":
     main()
-
